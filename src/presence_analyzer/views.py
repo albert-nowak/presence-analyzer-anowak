@@ -7,7 +7,8 @@ import calendar
 from flask import redirect, abort
 
 from presence_analyzer.main import app
-from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday
+from presence_analyzer.utils import jsonify, get_data, mean, \
+    group_by_weekday, average_work_hours, seconds_since_midnight
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -72,4 +73,38 @@ def presence_weekday_view(user_id):
     ]
 
     result.insert(0, ('Weekday', 'Presence (s)'))
+    return result
+
+
+@app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
+@jsonify
+def presence_start_end_view(user_id):
+    """
+    Returns daily timespan working hours of given user.
+    """
+    data = get_data()
+    if user_id not in data:
+        log.debug('User %s not found!', user_id)
+        abort(404)
+
+    start_times = [[], [], [], [], [], [], []]
+    end_times = [[], [], [], [], [], [], []]
+
+    for date in data[user_id]:
+        weekday = date.weekday()
+        start = data[user_id][date]['start']
+        end = data[user_id][date]['end']
+        start_in_sec = seconds_since_midnight(start)
+        end_int_sec = seconds_since_midnight(end)
+
+        start_times[weekday].append(start_in_sec)
+        end_times[weekday].append(end_int_sec)
+
+    result = []
+    for i in range(5):
+        avg_start = average_work_hours(start_times[i])
+        avg_end = average_work_hours(end_times[i])
+        result.append(
+            [calendar.day_abbr[i], avg_start, avg_end]
+        )
     return result

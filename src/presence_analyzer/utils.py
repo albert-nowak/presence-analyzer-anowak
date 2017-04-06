@@ -4,6 +4,7 @@ Helper functions used in views.
 """
 
 import csv
+import math
 from json import dumps
 from functools import wraps
 from datetime import datetime
@@ -102,3 +103,26 @@ def mean(items):
     Calculates arithmetic mean. Returns zero for empty lists.
     """
     return float(sum(items)) / len(items) if len(items) > 0 else 0
+
+
+def average_work_hours(items):
+    """
+    Calculate average start and end hour of worktime.
+    """
+    avg_time = round(mean(items))
+    avg_m = avg_time / 60
+    avg_h = avg_m / 60
+
+    avg_sec = int(math.floor(avg_time % 60))
+    if avg_sec < 10:
+        avg_sec = '0' + str(avg_sec)
+
+    avg_min = int(math.floor(avg_m % 60))
+    if avg_min < 10:
+        avg_min = '0' + str(avg_min)
+
+    avg_hour = int(math.floor(avg_h % 24))
+    if avg_hour < 10:
+        avg_hour = '0' + str(avg_hour)
+
+    return "January 1, 2013 {}:{}:{}".format(avg_hour, avg_min, avg_sec)

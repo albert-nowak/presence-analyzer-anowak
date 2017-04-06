@@ -2,8 +2,8 @@
 """
 Presence analyzer unit tests.
 """
-import os.path
 import json
+import os.path
 import datetime
 import unittest
 
