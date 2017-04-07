@@ -5,7 +5,6 @@ Helper functions used in views.
 
 import csv
 import math
-import calendar
 from json import dumps
 from functools import wraps
 from datetime import datetime
@@ -118,7 +117,7 @@ def mean(items):
     return float(sum(items)) / len(items) if len(items) > 0 else 0
 
 
-def average_hour(items):
+def average_work_hours(items):
     """
     Calculates average hour and returns creates date string.
     """
