@@ -117,7 +117,7 @@ def mean(items):
     return float(sum(items)) / len(items) if len(items) > 0 else 0
 
 
-def average_work_hours(items):
+def average_hour(items):
     """
     Calculates average hour and returns creates date string.
     """
