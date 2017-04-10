@@ -28,6 +28,8 @@ def jsonify(function):
         return Response(
             dumps(function(*args, **kwargs)),
             mimetype='application/json'
+
+            
         )
     return inner
 
