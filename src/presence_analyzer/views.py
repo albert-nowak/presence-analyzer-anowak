@@ -2,9 +2,8 @@
 """
 Defines views.
 """
-import os
 import calendar
-from flask import redirect, abort, json
+from flask import redirect, abort
 
 from main import app
 from utils import jsonify, get_data, mean, \

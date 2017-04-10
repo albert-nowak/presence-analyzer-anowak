@@ -99,7 +99,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
                 ['Thu', 23705],
                 ['Fri', 0],
                 ['Sat', 0],
-                ['Sun', 0]]
+                ['Sun', 0]
+            ]
         )
 
     def test_presence_start_end_view(self):
