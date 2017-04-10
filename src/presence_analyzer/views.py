@@ -98,20 +98,3 @@ def presence_start_end_view(user_id):
             [calendar.day_abbr[i], avg_start, avg_end]
         )
     return result
-
-
-@app.route('/api/v1/resp', methods=['GET'])
-@jsonify
-def test_resp_view():
-    TEST_DATA_CSV = os.path.join(
-        os.path.dirname(__file__),
-        '..',
-        '..',
-        'runtime',
-        'data',
-        'test_data.csv'
-    )
-    app.config.update({'DATA_CSV': TEST_DATA_CSV})
-    client = app.test_client()
-    resp = client.get('/api/v1/users')
-    return json.loads(resp.data)

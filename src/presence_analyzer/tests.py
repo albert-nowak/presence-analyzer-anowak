@@ -2,9 +2,9 @@
 """
 Presence analyzer unit tests.
 """
+import datetime
 import json
 import os.path
-import datetime
 import unittest
 
 import main
@@ -74,7 +74,8 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
                 ['Thu', 23705],
                 ['Fri', 0],
                 ['Sat', 0],
-                ['Sun', 0]]
+                ['Sun', 0]
+            ]
         )
 
     def test_presence_weekday_view(self):
@@ -141,7 +142,6 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
                     'January 1, 2013 00:00:00'
                 ]
             ]
-
         )
 
 
@@ -184,13 +184,6 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         data = utils.get_data()
         weekdays = utils.group_by_weekday(data[10])
         self.assertEqual(weekdays[1][0], 30047)
-        with self.assertRaises(KeyError):
-            weekdays = utils.group_by_weekday(
-                data[10],
-                seconds=True,
-                start=True,
-                end=True
-            )
         weekday_s = utils.group_by_weekday(data[10], seconds=True, start=True)
         self.assertEqual(weekday_s[1][0], 34745)
         weekday_e = utils.group_by_weekday(data[10], seconds=True, end=True)
@@ -240,12 +233,12 @@ class PresenceAnalyzerUtilsTestCase(unittest.TestCase):
         weekdays = utils.group_by_weekday(data[10], seconds=True, start=True)
         self.assertEqual(
             utils.average_hour(weekdays[1]),
-            "January 1, 2013 09:39:05"
+            'January 1, 2013 09:39:05'
         )
         weekdays = utils.group_by_weekday(data[10], seconds=True, end=True)
         self.assertEqual(
             utils.average_hour(weekdays[1]),
-            "January 1, 2013 17:59:52"
+            'January 1, 2013 17:59:52'
         )
 
 
