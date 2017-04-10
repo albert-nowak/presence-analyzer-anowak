@@ -76,10 +76,19 @@
     <script src="/static/js/jquery.min.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
     <script type="text/javascript">
-        google.load("visualization", "1", {packages:["corechart"], 'language': 'pl'});
+        google.load("visualization", "1", {packages:["corechart", "timeline"], 'language': 'pl'});
     </script>
+<<<<<<< HEAD
     <script type="text/javascript" src="/static/js/scripts.js"></script>
+    <script type="text/javascript">    
+=======
     <script type="text/javascript">
+        function parseInterval(value) {
+            var result = new Date(value);
+            return result
+        }
+        
+>>>>>>> 74c1456... Added timeline + tests
         (function($) {
             $(document).ready(function(){
                 var loading = $('#loading');
@@ -91,30 +100,48 @@
                     dropdown.show();
                     loading.hide();
                 });
+<<<<<<< HEAD
                 $('#user_id').change(function() {
+=======
+                $('#user_id').change(function(){
+>>>>>>> 74c1456... Added timeline + tests
                     var selected_user = $("#user_id").val();
                     var chart_div = $('#chart_div');
                     if(selected_user) {
                         loading.show();
                         chart_div.hide();
-                        $.getJSON("/api/v1/mean_time_weekday/"+selected_user, function(result) {
-                            $.each(result, function(index, value) {
+                        
+                        $.getJSON("/api/v1/presence_start_end/"+selected_user, function(
+                            result){
+                            $.each(result, function(index, value){
+<<<<<<< HEAD
+                                value[1] = parseToDate(value[1]);
+                                value[2] = parseToDate(value[2]);
+=======
                                 value[1] = parseInterval(value[1]);
+                                value[2] = parseInterval(value[2]);
+>>>>>>> 74c1456... Added timeline + tests
                             });
                             var data = new google.visualization.DataTable();
                             data.addColumn('string', 'Weekday');
-                            data.addColumn('datetime', 'Mean time (h:m:s)');
+                            data.addColumn({ type: 'datetime', id: 'Start' });
+                            data.addColumn({ type: 'datetime', id: 'End' });
                             data.addRows(result);
                             var options = {
                                 hAxis: {title: 'Weekday'}
+<<<<<<< HEAD
+                            },
+                               formatter = new google.visualization.DateFormat({pattern: 'HH:mm:ss'});
+=======
                             };
                             var formatter = new google.visualization.DateFormat({pattern: 'HH:mm:ss'});
+>>>>>>> 74c1456... Added timeline + tests
                             formatter.format(data, 1);
+                            formatter.format(data, 2);
 
-                            
                             chart_div.show();
                             loading.hide();
-                            var chart = new google.visualization.ColumnChart(chart_div[0]);
+                            var chart = new google.visualization.Timeline(chart_div[0]);
                             chart.draw(data, options);
                         });
                     }
@@ -128,15 +155,18 @@
     <div id="main">
         <div id="header">
             <h1>Presence analyzer</h1>
+<<<<<<< HEAD
+=======
             
+>>>>>>> 74c1456... Added timeline + tests
             <ul>
                 <li><a href="/static/presence_weekday.html">Presence by weekday</a></li>
-                <li id="selected"><a href="/static/mean_time_weekday.html">Presence mean time</a></li>
-                <li><a href="/static/presence_start_end.html">Presence start-end</a></li>
+                <li><a href="/static/mean_time_weekday.html">Presence mean time</a></li>
+                <li id="selected"><a href="/static/presence_start_end.html">Presence start-end</a></li>
             </ul>
         </div>
         <div id="content">
-            <h2>Presence mean time by weekday</h2>
+            <h2>Presence start-end weekday</h2>
             <p>
                 <select id="user_id" style="display: none">
                     <option value="">--</option>
@@ -148,6 +178,9 @@
                 </div>
             </p>
         </div>
+<<<<<<< HEAD
+=======
 
+>>>>>>> 74c1456... Added timeline + tests
     </div>
 </body>
