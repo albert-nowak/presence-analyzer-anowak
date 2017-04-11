@@ -2,12 +2,13 @@
 """
 Defines views.
 """
-
 import calendar
 from flask import redirect, abort
+from time import gmtime, strftime
 
-from presence_analyzer.main import app
-from presence_analyzer.utils import jsonify, get_data, mean, group_by_weekday
+from main import app
+from utils import jsonify, get_data, mean, \
+    group_by_weekday
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -72,4 +73,34 @@ def presence_weekday_view(user_id):
     ]
 
     result.insert(0, ('Weekday', 'Presence (s)'))
+    return result
+
+
+@app.route('/api/v1/presence_start_end/<int:user_id>', methods=['GET'])
+@jsonify
+def presence_start_end_view(user_id):
+    """
+    Returns daily timespan working hours of given user.
+    """
+    data = get_data()
+    if user_id not in data:
+        log.debug('User %s not found!', user_id)
+        abort(404)
+
+    start_times = group_by_weekday(data[user_id], seconds=True, start=True)
+    end_times = group_by_weekday(data[user_id], seconds=True, end=True)
+
+    result = []
+    for i in xrange(7):  # 7 days a week
+        avg_start = round(mean(start_times[i]))
+        avg_end = round(mean(end_times[i]))
+        hour_start = strftime('%H:%M:%S', gmtime(avg_start))
+        hour_end = strftime('%H:%M:%S', gmtime(avg_end))
+        result.append(
+            [
+                calendar.day_abbr[i],
+                'January 1, ' + hour_start,
+                'January 1, ' + hour_end
+            ]
+        )
     return result

@@ -4,13 +4,15 @@ Helper functions used in views.
 """
 
 import csv
-from json import dumps
-from functools import wraps
+import math
+
 from datetime import datetime
+from functools import wraps
+from json import dumps
 
 from flask import Response
 
-from presence_analyzer.main import app
+from main import app
 
 import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
@@ -71,15 +73,27 @@ def get_data():
     return data
 
 
-def group_by_weekday(items):
+def group_by_weekday(items, *args, **kwargs):
     """
     Groups presence entries by weekday.
     """
+    if 'start' in kwargs and kwargs['start'] and \
+            'end' in kwargs and kwargs['end']:
+        raise KeyError('Conflicting arguments in kwargs!')
+
     result = [[], [], [], [], [], [], []]  # one list for every day in week
     for date in items:
         start = items[date]['start']
         end = items[date]['end']
-        result[date.weekday()].append(interval(start, end))
+        if 'seconds' in kwargs:
+            if 'start' in kwargs:
+                result[date.weekday()].append(seconds_since_midnight(start))
+            elif 'end' in kwargs:
+                result[date.weekday()].append(seconds_since_midnight(end))
+            else:
+                raise KeyError('Didn\'t receive \'start\' or \'end\' param.')
+        else:
+            result[date.weekday()].append(interval(start, end))
     return result
 
 
@@ -92,7 +106,7 @@ def seconds_since_midnight(time):
 
 def interval(start, end):
     """
-    Calculates inverval in seconds between two datetime.time objects.
+    Calculates interval in seconds between two datetime.time objects.
     """
     return seconds_since_midnight(end) - seconds_since_midnight(start)
 
