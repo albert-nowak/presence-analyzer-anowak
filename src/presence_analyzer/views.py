@@ -5,7 +5,7 @@ Defines views.
 from calendar import day_abbr
 from collections import OrderedDict
 
-from flask import abort, redirect
+from flask import abort, render_template
 
 from main import app
 from utils import (
@@ -20,12 +20,28 @@ import logging
 log = logging.getLogger(__name__)  # pylint: disable=invalid-name
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def mainpage():
     """
     Redirects to front page.
     """
-    return redirect('/static/presence_weekday.html')
+    return render_template('presence_weekday.html')
+
+
+@app.route('/mean_time_weekday', methods=['GET'])
+def mean_time_page():
+    """
+    Redirects to mean_time_weekday page.
+    """
+    return render_template('mean_time_weekday.html')
+
+
+@app.route('/presence_start_end', methods=['GET'])
+def presence_start_end_page():
+    """
+    Redirects to presence_start_end page.
+    """
+    return render_template('presence_start_end.html')
 
 
 @app.route('/api/v1/users', methods=['GET'])
