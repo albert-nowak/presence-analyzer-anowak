@@ -180,25 +180,25 @@ class PresenceAnalyzerViewsTestCase(unittest.TestCase):
 
         self.assertEqual(resp.content_type, 'application/json')
         data = json.loads(resp.data)
-        self.assertEqual(data[0], 'September-2013')
+        self.assertEqual(data[0], '2013-September')
 
     def test_top_5(self):
         """
         Test top 5 emplyees of certein month.
         """
-        resp = self.client.get('/api/v1/top_5/Sep-2013')
+        resp = self.client.get('/api/v1/top_5/2013-Sep')
         self.assertEqual(resp.status_code, 404)
 
-        resp = self.client.get('/api/v1/top_5/September-9999')
+        resp = self.client.get('/api/v1/top_5/9999-September')
         self.assertEqual(resp.status_code, 404)
 
-        resp = self.client.get('/api/v1/top_5/September-1')
+        resp = self.client.get('/api/v1/top_5/1-September')
         self.assertEqual(resp.status_code, 404)
 
-        resp = self.client.get('/api/v1/top_5/September2013')
+        resp = self.client.get('/api/v1/top_5/2013September')
         self.assertEqual(resp.status_code, 404)
 
-        resp = self.client.get('/api/v1/top_5/September-2013')
+        resp = self.client.get('/api/v1/top_5/2013-September')
         self.assertEqual(resp.status_code, 200)
 
         data = json.loads(resp.data)

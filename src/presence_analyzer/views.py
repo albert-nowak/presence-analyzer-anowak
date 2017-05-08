@@ -2,6 +2,8 @@
 """
 Defines views.
 """
+import locale
+
 from calendar import day_abbr, month_name
 from collections import OrderedDict
 
@@ -30,6 +32,8 @@ TEMPLATES = [
     ('presence_start_end.html', 'Presence start-end'),
     ('presence_top_5.html', 'Top 5')
 ]
+
+locale.setlocale(locale.LC_COLLATE, 'pl_PL.UTF-8')
 
 
 @app.route('/', methods=['GET'])
@@ -72,10 +76,11 @@ def users_view():
     Users listing for dropdown.
     """
     data = get_data()
-    return [
+    users = [
         {'user_id': i, 'name': data[i]['name']}
         for i in data.keys()
     ]
+    return sorted(users, key=lambda k: k['name'], cmp=locale.strcoll)
 
 
 @app.route('/api/v1/months', methods=['GET'])
