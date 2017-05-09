@@ -33,6 +33,7 @@ body {
     border: 1px solid #BBB;
     border-bottom-width: 0;
     margin: 0;
+    width: 198px;
 }
 
 #header a {
@@ -41,7 +42,6 @@ body {
     background: #EEE;
     padding: 0.24em 1em;
     color: #00C;
-    width: 10em;
     text-align: center;
 }
 
